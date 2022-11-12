@@ -1,4 +1,4 @@
 # MyPython
 Первые шаги
 
-Решения задач на курсе "Поколение Python": курс для начинающих (Stepik) и QAP (SkillFactory))
+Решения задач на курсе QAP (SkillFactory))
