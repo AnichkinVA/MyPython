@@ -1,0 +1,106 @@
+# Запрашиваем список чисел
+numbers = input('Введите целые числа через пробел: ')
+
+# Запрашиваем число пользователя и проводим проверку ввода
+while True:
+    try:
+        user_number = int(input('Введите любое целое число: '))
+        break
+    except ValueError:
+        print('Ошибка! Введите целое число.\n   (Используйте цифры для ввода):')
+
+# Функция проверки наличия цифр в вводе пользователя
+def is_int(str):
+    str = str.replace(' ', '')
+    try:
+        int(str)
+        return True
+    except ValueError:
+        return False
+
+# Проверка условия ввода через пробел
+if " " not in numbers:
+    print("\nОшибка! Пожалуйста, введите числа через пробел.)")
+    numbers = input('Введите целые числа через пробел: ')
+if not is_int(numbers):
+    print('\nОшибка! Пожалуйста, введите целые числа через пробел.)\n')
+else:
+    numbers = numbers.split()
+
+# Преобразование списка строк в список чисел
+list_numbers = [int(item) for item in numbers]
+
+# Функция сортировки списка
+def merge_sort(L):
+    if len(L) < 2:
+        return L[:]
+    else:
+        middle = len(L) // 2
+        left = merge_sort(L[:middle])
+        right = merge_sort(L[middle:])
+        return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i, j = 0, 0
+
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+
+    while i < len(left):
+        result.append(left[i])
+        i += 1
+
+    while j < len(right):
+        result.append(right[j])
+        j += 1
+    return result
+
+# Сортировка списка
+list_numbers = merge_sort(list_numbers)
+
+# Поиск позиции элемента
+def binary_search(array, element, left, right):
+    try:
+        if left > right:
+            return False
+        middle = (right + left) // 2
+        if array[middle] == element:
+            return middle
+        elif element < array[middle]:
+            return binary_search(array, element, left, middle - 1)
+        else:
+            return binary_search(array, element, middle + 1, right)
+    except IndexError:
+        return 'Число выходит за диапазон списка, введите меньшее число.'
+
+# Вывод упорядоченного по возрастанию чисел списка
+print(f'Упорядоченный по возрастанию список: {list_numbers}')
+
+# Вывод результатов проверки
+if not binary_search(list_numbers, user_number, 0, len(list_numbers)):
+    rI = min(list_numbers, key=lambda x: (abs(x - user_number), x))
+    ind = list_numbers.index(rI)
+    max_ind = ind + 1
+    min_ind = ind - 1
+    if rI < user_number:
+        print(f'''Введенное число не содержится в списке 
+Ближайший меньший элемент: {rI}. Его индекс: {ind}
+Ближайший больший элемент: {list_numbers[max_ind]}. Его индекс: {max_ind}''')
+    elif min_ind < 0:
+        print(f'''В списке нет введенного элемента
+Ближайший больший элемент: {rI}, его индекс: {list_numbers.index(rI)}
+В списке нет меньшего элемента, условие не выполнено''')
+    elif rI > user_number:
+        print(f'''Введенное число не содержится в списке
+Ближайший больший элемент: {rI}. Его индекс: {list_numbers.index(rI)}
+Ближайший меньший элемент: {list_numbers[min_ind]}. Его индекс: {min_ind}''')
+    elif list_numbers.index(rI) == 0:
+        print(f'Индекс введенного элемента: {list_numbers.index(rI)}')
+else:
+    print(f'Индекс введенного элемента: {binary_search(list_numbers, user_number, 0, len(list_numbers))}')
